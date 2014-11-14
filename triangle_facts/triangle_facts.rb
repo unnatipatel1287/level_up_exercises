@@ -26,32 +26,6 @@ class Triangle
     !(equilateral? || isosceles?)
   end
 
-  def right?
-    [angle1, angle2, angle3].include?(90)
-  end
-
-  def print_angles
-    puts "The angles of this triangle are #{angle1}, #{angle2}, #{angle3}"
-  end
-
-  def angle1
-    numerator = @side2**2 + @side3**2 - @side1**2
-    denominator = 2.0 * @side2 * @side3
-    radians_to_degrees(Math.acos(numerator / denominator))
-  end
-
-  def angle2
-    numerator = @side1**2 + @side3**2 - @side2**2
-    denominator = 2.0 * @side1 * @side3
-    radians_to_degrees(Math.acos(numerator / denominator))
-  end
-
-  def angle3
-    numerator = @side1**2 + @side2**2 - @side3**2
-    denominator = 2.0 * @side1 * @side2
-    radians_to_degrees(Math.acos(numerator / denominator))
-  end
-
   def which_triangle
     output = {
       equilateral: 'This triangle is equilateral!',
@@ -63,9 +37,23 @@ class Triangle
 
   def recite_facts
     puts which_triangle
-    puts print_angles
-    puts 'This triangle is also aright triangle!' if right?
+    angles = calculate_angles(side1, side2, side3)
+    puts 'The angles of this triangle are ' + angles.join(',')
+    puts 'This triangle is also a right triangle!' if angles.include? 90
     puts ''
+  end
+
+  def calculate_angles(a, b, c)
+    [pythagoras(a, b, c),
+     pythagoras(b, c, a),
+     pythagoras(c, a, b),
+    ]
+  end
+
+  def pythagoras(a, b, c)
+    num = (b**2 + c**2 - a**2)
+    den = (2.0 * b * c)
+    radians_to_degrees(Math.acos(num / den))
   end
 
   def radians_to_degrees(rads)
